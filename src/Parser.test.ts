@@ -1,4 +1,4 @@
-import { ch, end } from "./Parser";
+import { ch, end, regex } from "./Parser";
 import { failure, success } from "./ParseResult";
 
 describe("ch", () => {
@@ -20,5 +20,20 @@ describe("end", () => {
 
   test("Parse failure", () => {
     expect(end("rest")).toEqual(failure("rest"));
+  });
+});
+
+describe("regex", () => {
+  const wordsParser = regex(/\w+/);
+
+  test("Parse success", () => {
+    expect(wordsParser("foo rest.")).toEqual(success("foo", " rest."));
+    expect(wordsParser("foo2bar")).toEqual(success("foo", "2bar"));
+    expect(wordsParser("a!")).toEqual(success("a", "!"));
+  });
+
+  test("Parse failure", () => {
+    expect(wordsParser(";a")).toEqual(failure(";a"));
+    expect(wordsParser("0a")).toEqual(failure("0a"));
   });
 });
