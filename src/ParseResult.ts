@@ -19,3 +19,8 @@ export const failure = (next: string | null): Failure => ({
   type: "Failure",
   next,
 });
+
+export const isSuccess: <T>(result: ParseResult<T>) => boolean = (result) =>
+  result.type === "Success";
+export const isFailure: <T>(result: ParseResult<T>) => boolean = (result) =>
+  result.type === "Failure";
