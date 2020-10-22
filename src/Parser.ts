@@ -44,3 +44,13 @@ export const seq: (
     ? success(results, next)
     : failure(input);
 };
+
+export const alt: (parsers: Parser<unknown>[]) => Parser<unknown> = (
+  parsers
+) => (input) => {
+  for (const parser of parsers) {
+    const result = parser(input);
+    if (isSuccess(result)) return result;
+  }
+  return failure(input);
+};

@@ -1,4 +1,4 @@
-import { ch, end, regex, seq } from "./Parser";
+import { alt, ch, end, regex, seq } from "./Parser";
 import { failure, success } from "./ParseResult";
 
 describe("ch", () => {
@@ -65,5 +65,19 @@ describe("seq", () => {
 
   test("Parse failure (halfway death)", () => {
     expect(parser("foo  !!")).toEqual(failure("foo  !!"));
+  });
+});
+
+describe("alt", () => {
+  const parser = alt([ch("true"), ch("false")]);
+
+  test("Parse success", () => {
+    expect(parser("truefalse")).toEqual(success("true", "false"));
+    expect(parser("falsetrue")).toEqual(success("false", "true"));
+  });
+
+  test("Parse failure", () => {
+    expect(parser("True")).toEqual(failure("True"));
+    expect(parser("False")).toEqual(failure("False"));
   });
 });
