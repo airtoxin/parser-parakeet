@@ -20,7 +20,7 @@ export const failure = (next: string | null): Failure => ({
   next,
 });
 
-export const isSuccess: <T>(result: ParseResult<T>) => boolean = (result) =>
+export const isSuccess = <T>(result: ParseResult<T>): result is Success<T> =>
   result.type === "Success";
-export const isFailure: <T>(result: ParseResult<T>) => boolean = (result) =>
+export const isFailure = <T>(result: ParseResult<T>): result is Failure =>
   result.type === "Failure";

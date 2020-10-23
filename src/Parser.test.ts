@@ -1,4 +1,4 @@
-import { alt, ch, end, regex, seq } from "./Parser";
+import { alt, ch, end, map, regex, seq } from "./Parser";
 import { failure, success } from "./ParseResult";
 
 describe("ch", () => {
@@ -79,5 +79,12 @@ describe("alt", () => {
   test("Parse failure", () => {
     expect(parser("True")).toEqual(failure("True"));
     expect(parser("False")).toEqual(failure("False"));
+  });
+});
+
+describe("map", () => {
+  const parser = map(ch("10"), (_ten) => 10);
+  test("Parse success", () => {
+    expect(parser("10")).toEqual(success(10, ""));
   });
 });

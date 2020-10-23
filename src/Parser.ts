@@ -8,7 +8,9 @@ import {
 
 export type Parser<T> = (input: string) => ParseResult<T>;
 
-export const ch: (expected: string) => Parser<string> = (expected) => (input) =>
+export const ch: <T extends string>(expected: T) => Parser<T> = (expected) => (
+  input
+) =>
   input.startsWith(expected)
     ? success(expected, input.slice(expected.length))
     : failure(input);
@@ -53,4 +55,14 @@ export const alt: (parsers: Parser<unknown>[]) => Parser<unknown> = (
     if (isSuccess(result)) return result;
   }
   return failure(input);
+};
+
+export const map: <T, U>(
+  parser: Parser<T>,
+  mapper: (result: T) => U
+) => Parser<U> = (parser, mapper) => (input) => {
+  const result = parser(input);
+  return isSuccess(result)
+    ? success(mapper(result.result), result.next)
+    : result;
 };
